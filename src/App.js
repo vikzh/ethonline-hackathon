@@ -2,6 +2,7 @@ import {useState, useEffect} from "react";
 import React from 'react';
 import celestial from "d3-celestial";
 import { Row, Col, Card, Tooltip } from 'antd';
+import { MetaMaskButton } from "@metamask/sdk-react-ui";
 import {
     Form,
     Input,
@@ -23,23 +24,25 @@ const formItemLayout = {
     },
 };
 
-const SubmitButton = ({ form }: { form: FormInstance }) => {
+const SubmitButton = ({ form }) => {
     const [submittable, setSubmittable] = React.useState(false);
 
     // Watch all values
     const values = Form.useWatch([], form);
-
     React.useEffect(() => {
-        form.validateFields({ validateOnly: true }).then(
-            () => {
-                setSubmittable(true);
-            },
-            () => {
-                setSubmittable(false);
-            },
-        );
+        form
+            .validateFields({
+                validateOnly: true,
+            })
+            .then(
+                () => {
+                    setSubmittable(true);
+                },
+                () => {
+                    setSubmittable(false);
+                },
+            );
     }, [values]);
-
     return (
         <Button type="primary" htmlType="submit" disabled={!submittable}>
             Submit
@@ -196,6 +199,14 @@ export default function App() {
                     </Col>
                     <Col xl={6} lg={24} md={24} sm={24} xs={24}>
                         <Card
+                            title={<MetaMaskButton theme={"light"} color="white"></MetaMaskButton>}
+                            style={{ marginBottom: 24 }}
+                            bodyStyle={{ textAlign: 'center' }}
+                            bordered={false}
+                        >
+                            Amount of Tokens: 100
+                        </Card>
+                        <Card
                             title='Propose new Celestial'
                             style={{ marginBottom: 24 }}
                             bordered={false}
@@ -220,14 +231,6 @@ export default function App() {
                                     </Space>
                                 </Form.Item>
                             </Form>
-                        </Card>
-                        <Card
-                            title='title'
-                            style={{ marginBottom: 24 }}
-                            bodyStyle={{ textAlign: 'center' }}
-                            bordered={false}
-                        >
-                           gauge
                         </Card>
                     </Col>
                 </Row>
