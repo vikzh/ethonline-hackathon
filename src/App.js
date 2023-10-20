@@ -1,64 +1,19 @@
 import {useState, useEffect} from "react";
 import React from 'react';
 import celestial from "d3-celestial";
-import { Row, Col, Card, Tooltip } from 'antd';
-import { MetaMaskButton } from "@metamask/sdk-react-ui";
-import {
-    Form,
-    Input,
-    Button,
-    Space
-} from 'antd';
-const FormItem = Form.Item;
-const Celestial = celestial.Celestial();
-window.Celestial = Celestial;
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 7 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 12 },
-        md: { span: 10 },
-    },
-};
-
-const SubmitButton = ({ form }) => {
-    const [submittable, setSubmittable] = React.useState(false);
-
-    // Watch all values
-    const values = Form.useWatch([], form);
-    React.useEffect(() => {
-        form
-            .validateFields({
-                validateOnly: true,
-            })
-            .then(
-                () => {
-                    setSubmittable(true);
-                },
-                () => {
-                    setSubmittable(false);
-                },
-            );
-    }, [values]);
-    return (
-        <Button type="primary" htmlType="submit" disabled={!submittable}>
-            Submit
-        </Button>
-    );
-};
+import {Row, Col, Card, Tooltip, Form} from 'antd';
+import Wallet from "./Wallet";
+import ProposalCreation from "./ProposalCreation";
+import Proposals from "./Proposals";
 
 export default function App() {
-    const [date, setDate] = useState("2023-09-25T04:00:00+0000");
-    const [LAT, LON] = [36.525321, -121.815916];
-    const FONT = "Raleway";
+    const [form] = Form.useForm();
+    const Celestial = celestial.Celestial();
+    window.Celestial = Celestial;
 
     const config = {
-        width: 800,
+        width: 570,
         projection: "orthographic",
-        center: [-65, 0],
         background: {fill: "#fff", stroke: "#000", opacity: 1, width: 1},
         container: "celestial-map",
         datapath: "https://ofrohn.github.io/data/",
@@ -88,8 +43,8 @@ export default function App() {
 
     useEffect(() => {
         Celestial.display(config);
-        handleDateChange()
-    }, [date]);
+        handleDateChange();
+    }, []);
 
     const handleDateChange = () => {
         var lineStyle = {
@@ -174,108 +129,38 @@ export default function App() {
                 x = e.offsetX,
                 y = e.offsetY,
                 inv = Celestial.mapProjection.invert([x, y]);
-            console.log(inv);
+            const [invX, invY] = inv;
+            if(!isNaN(invX) && !isNaN(invY)) {
+                form.setFieldValue('X', invX);
+                form.setFieldValue('Y', invY);
+            }
             return inv; // [right ascension -180...180 degrees, declination -90...90 degrees]
         }
 
-        document.getElementById('celestial-map').addEventListener('mousemove', getPosition, false);
+        document.getElementById('celestial-map').addEventListener('click', getPosition, false);
     };
-
-    const [form] = Form.useForm();
 
     return (
         <div className="App">
             <div>
                 <Row gutter={24}>
-                    <Col xl={18} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
+                    <Col xl={16} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
                         <Card
                             title='Celestial Data DAO'
                             bordered={false}
                         >
                             <div>
-                                <div id="celestial-map"></div>
+                                <div id="celestial-map" style={{display: 'flex', justifyContent: 'center'}}></div>
                             </div>
                         </Card>
                     </Col>
-                    <Col xl={6} lg={24} md={24} sm={24} xs={24}>
-                        <Card
-                            title={<MetaMaskButton theme={"light"} color="white"></MetaMaskButton>}
-                            style={{ marginBottom: 24 }}
-                            bodyStyle={{ textAlign: 'center' }}
-                            bordered={false}
-                        >
-                            Amount of Tokens: 100
-                        </Card>
-                        <Card
-                            title='Propose new Celestial'
-                            style={{ marginBottom: 24 }}
-                            bordered={false}
-                        >
-                            <Form form={form} name="validateOnly" layout="vertical" autoComplete="off">
-                                <Form.Item name="Name" label="Name:" rules={[{ required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name="X" label="X:" rules={[{ required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name="Y" label="Y:" rules={[{ required: true }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name="Description" label="Description:">
-                                    <Input.TextArea />
-                                </Form.Item>
-                                <Form.Item>
-                                    <Space>
-                                        <SubmitButton form={form} />
-                                        <Button htmlType="reset">Reset</Button>
-                                    </Space>
-                                </Form.Item>
-                            </Form>
-                        </Card>
+                    <Col xl={8} lg={24} md={24} sm={24} xs={24}>
+                        <Wallet/>
+                        <ProposalCreation form={form}/>
                     </Col>
                 </Row>
-                <Row gutter={24}>
-                    <Col xl={12} lg={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
-                        <Card
-                            title='title'
-                            bordered={false}
-                        >
-                            <Row style={{ padding: '16px 0' }}>
-                                <Col span={8}>
-                                    pie
-                                </Col>
-                                <Col span={8}>
-                                    Pie
-                                </Col>
-                                <Col span={8}>
-                                    Pie
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Col>
-                    <Col xl={6} lg={12} sm={24} xs={24} style={{ marginBottom: 24 }}>
-                        <Card
-                            title='title'
-                            bordered={false}
-                            bodyStyle={{ overflow: 'hidden' }}
-                        >
-                            tag cloud
-                        </Card>
-                    </Col>
-                    <Col xl={6} lg={12} sm={24} xs={24} style={{ marginBottom: 24 }}>
-                        <Card
-                            title='title'
-                            bodyStyle={{ textAlign: 'center', fontSize: 0 }}
-                            bordered={false}
-                        >
-                            water wave
-                        </Card>
-                    </Col>
-                </Row>
+            <Proposals/>
             </div>
-
-
-            <button onClick={handleDateChange}>Change date</button>
         </div>
     );
 }
