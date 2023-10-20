@@ -1,12 +1,23 @@
 import React from "react";
 import {Button, Card, Form, Input, Space} from "antd";
+import { ethers } from "ethers";
+import daoABI from './daoABI.json';
 
 const SubmitButton = ({form}) => {
     const [submittable, setSubmittable] = React.useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (submittable) {
-            alert(true);
+            // alert(true);
+            const {
+                X,
+                Y,
+                Name,
+                Description
+            } = form.getFieldsValue();
+            const provider = new ethers.BrowserProvider(window.ethereum);
+            const contract = new ethers.Contract("0x22eDafc8e684782b702fd4A91b13C5ddD4AEAFc4", daoABI, await provider.getSigner());
+            await contract.createProposal(Name, Description, X, Y);
         }
     };
 

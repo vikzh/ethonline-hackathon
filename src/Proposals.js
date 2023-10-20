@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Avatar, Button, List, Skeleton, Card} from 'antd';
 
-const count = 3;
-const fakeDataUrl = `https://randomuser.me/api/?results=${count}&inc=name,gender,email,nat,picture&noinfo`;
+const count = 20;
+const fakeDataUrl = `https://testnets.tableland.network/api/v1/query?statement=SELECT%20%2A%20FROM%20celestial_table_314159_592`;
 const Proposals = () => {
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -13,8 +13,8 @@ const Proposals = () => {
             .then((res) => res.json())
             .then((res) => {
                 setInitLoading(false);
-                setData(res.results);
-                setList(res.results);
+                setData(res);
+                setList(res);
             });
     }, []);
     const onLoadMore = () => {
@@ -51,7 +51,6 @@ const Proposals = () => {
                     lineHeight: '32px',
                 }}
             >
-                <Button onClick={onLoadMore}>loading more</Button>
             </div>
         ) : null;
     return (
@@ -67,14 +66,14 @@ const Proposals = () => {
                 dataSource={list}
                 renderItem={(item) => (
                     <List.Item
-                        actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>]}
+                        actions={[<a key="list-loadmore-edit">edit</a>, <a key="list-loadmore-more">more</a>,
+                            <a key="list-loadmore-execute">execute</a>]}
                     >
                         <Skeleton avatar title={false} loading={item.loading} active>
                             <List.Item.Meta
-                                title={item.name?.last}
+                                title={item.description}
                                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"
                             />
-                            <div>content</div>
                         </Skeleton>
                     </List.Item>
                 )}

@@ -5,7 +5,7 @@ import React from "react";
 const Wallet = () =>{
     return (
         <Card
-            title={<MetaMaskButton theme={"light"} color="white" buttonStyle={{display: 'flex', justifyContent: 'center'}} style={{width: '100%', display: 'flex', justifyContent: 'center'}}></MetaMaskButton>}
+            title={<MetaMaskButton theme={"light"} color="white" buttonStyle={{display: 'flex', justifyContent: 'center', width: '100%'}}></MetaMaskButton>}
             style={{ marginBottom: 24 }}
             bodyStyle={{ textAlign: 'center' }}
             bordered={false}
