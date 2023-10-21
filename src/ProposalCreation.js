@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Card, Form, Input, Space} from "antd";
-import { ethers } from "ethers";
+import {ethers} from "ethers";
 import daoABI from './daoABI.json';
 
 const SubmitButton = ({form}) => {
@@ -8,7 +8,6 @@ const SubmitButton = ({form}) => {
 
     const handleSubmit = async () => {
         if (submittable) {
-            // alert(true);
             const {
                 X,
                 Y,
@@ -17,7 +16,11 @@ const SubmitButton = ({form}) => {
             } = form.getFieldsValue();
             const provider = new ethers.BrowserProvider(window.ethereum);
             const contract = new ethers.Contract(process.env.REACT_APP_DAO_ADDRESS, daoABI, await provider.getSigner());
-            await contract.createProposal(Name, Description, X, Y);
+            try {
+                await contract.createProposal(Name, Description, String(X), String(Y));
+            } catch (error) {
+                console.error(error);
+            }
         }
     };
 
