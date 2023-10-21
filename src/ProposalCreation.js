@@ -16,7 +16,7 @@ const SubmitButton = ({form}) => {
                 Description
             } = form.getFieldsValue();
             const provider = new ethers.BrowserProvider(window.ethereum);
-            const contract = new ethers.Contract("0x22eDafc8e684782b702fd4A91b13C5ddD4AEAFc4", daoABI, await provider.getSigner());
+            const contract = new ethers.Contract(process.env.REACT_APP_DAO_ADDRESS, daoABI, await provider.getSigner());
             await contract.createProposal(Name, Description, X, Y);
         }
     };
