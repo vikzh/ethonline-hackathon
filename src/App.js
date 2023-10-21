@@ -35,7 +35,7 @@ export default function App() {
                 <Row gutter={24}>
                     <Col xl={16} lg={24} md={24} sm={24} xs={24} style={{ marginBottom: 24 }}>
                         <Card
-                            title='Celestial Data DAO'
+                            title='Atlas Data DAO'
                             bordered={false}
                         >
                         <div>

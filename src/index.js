@@ -9,7 +9,7 @@ root.render(
     <React.StrictMode>
         <MetaMaskUIProvider sdkOptions={{
             dappMetadata: {
-                name: "Celestial Data DAO",
+                name: "Atlas Data DAO",
             },
         }}>
             <App/>

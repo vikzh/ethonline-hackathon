@@ -51,7 +51,7 @@ const SubmitButton = ({form}) => {
 const ProposalCreation = ({form}) => {
     return (
         <Card
-            title='Propose new Celestial'
+            title='Propose new Object'
             style={{marginBottom: 24}}
             bordered={false}
         >

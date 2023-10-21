@@ -52,7 +52,7 @@ const Proposals = () => {
     }, []);
     return (
         <Card
-            title='Propose new Celestial'
+            title='Active Proposals'
             bordered={false}
         >
             <List
