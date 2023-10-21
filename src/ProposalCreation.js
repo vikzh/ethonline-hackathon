@@ -18,6 +18,7 @@ const SubmitButton = ({form}) => {
             const contract = new ethers.Contract(process.env.REACT_APP_DAO_ADDRESS, daoABI, await provider.getSigner());
             try {
                 await contract.createProposal(Name, Description, String(X), String(Y));
+                form.resetFields();
             } catch (error) {
                 console.error(error);
             }
@@ -41,7 +42,7 @@ const SubmitButton = ({form}) => {
             );
     }, [values]);
     return (
-        <Button type="primary" htmlType="submit" disabled={!submittable} onClick={handleSubmit}>
+        <Button htmlType="submit" disabled={!submittable} onClick={handleSubmit}>
             Submit
         </Button>
     );

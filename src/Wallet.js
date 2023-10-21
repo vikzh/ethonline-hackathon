@@ -12,8 +12,7 @@ const Wallet = () =>{
             const provider = new ethers.BrowserProvider(window.ethereum);
             const contract = new ethers.Contract(process.env.REACT_APP_COIN_ADDRESS, coinABI, await provider.getSigner());
             const smartContractBalance = await contract.balanceOf((await provider.getSigner()).address);
-            console.log(balance);
-            setBalance(String(smartContractBalance));
+            setBalance(ethers.formatEther(smartContractBalance));
         };
         callback();
     }, []);

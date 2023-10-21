@@ -3,23 +3,11 @@ import {List, Skeleton, Card} from 'antd';
 import {ethers} from "ethers";
 import daoABI from "./daoABI.json";
 
-
-const count = 20;
-const fakeDataUrl = `https://testnets.tableland.network/api/v1/query?statement=SELECT%20%2A%20FROM%20celestial_table_314159_594`;
 const Proposals = () => {
     const [initLoading, setInitLoading] = useState(true);
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [list, setList] = useState([]);
-
-    // const handleVote = async (positivity = true) => {
-    //     const provider = new ethers.BrowserProvider(window.ethereum);
-    //     const contract = new ethers.Contract(process.env.REACT_APP_COIN_ADDRESS, coinABI, await provider.getSigner());
-    //     const accounts = await provider.send("eth_requestAccounts", []);
-    //     const account = accounts[0];
-    //     const balance = await contract.balanceOf(account);
-    //     alert(balance);
-    // };
 
     const vote = (proposalId, positivity = true) => {
         const callback = async (proposalId, positivity = true) => {
@@ -50,20 +38,14 @@ const Proposals = () => {
     }
 
     useEffect(() => {
-        // fetch(fakeDataUrl)
-        //     .then((res) => res.json())
-        //     .then((res) => {
-        //         setInitLoading(false);
-        //         setData(res);
-        //         setList(res);
-        //     });
         const callback = async () => {
             const provider = new ethers.BrowserProvider(window.ethereum);
             const contract = new ethers.Contract(process.env.REACT_APP_DAO_ADDRESS, daoABI, await provider.getSigner());
             const proposals = await contract.getProposals();
+            const filteredProposals = proposals.filter(proposal => !proposal.executed);
             setInitLoading(false);
-            setData(proposals);
-            setList(proposals);
+            setData(filteredProposals);
+            setList(filteredProposals);
         };
 
         callback();
