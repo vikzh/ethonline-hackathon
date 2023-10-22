@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#000000" />
     <meta
       name="description"
-      content="Web site created using create-react-app"
+      content="Decentralised way maintaining astronomical data and benefit from it"
     />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
@@ -29,7 +29,7 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <title>Atlas Data DAO</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -51,7 +51,7 @@
     <script>
       window.onload = function() {
         const count = 20;
-        const tablelandDataUrl = `https://testnets.tableland.network/api/v1/query?statement=SELECT%20%2A%20FROM%20celestial_table_314159_624`;
+        const tablelandDataUrl = `https://testnets.tableland.network/api/v1/query?statement=SELECT%20%2A%20FROM%20celestial_table_314159_631`;
 
         const config = {
           width: 570,
@@ -86,16 +86,15 @@
         const addPoints = async () => {
           const request = await fetch(tablelandDataUrl);
           const points = await request.json();
-          console.log(points);
           const formatedPoints = points.map((point) => {
             return {
               "type": "Feature",
               "id": point.id,
               "properties": {
                 // Name
-                "n": point.name,
+                "n": point.description,
                 // Location of name text on the map
-                "loc": [parseFloat(point.x), parseFloat(point.y) + 3]
+                "loc": [parseFloat(point.x), parseFloat(point.y) + 2]
               }, "geometry": {
                 // the line object as an array of point coordinates
                 "type": "Point",
@@ -121,7 +120,6 @@
             // this is an array, add as many objects as you want
             "features": formatedPoints
           };
-          console.log('celestial add');
           Celestial.add({
             type: "line",
 
